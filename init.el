@@ -76,7 +76,9 @@
 
 
 (use-package magit
-  :ensure t)
+  :ensure t
+  :config
+    (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
 (use-package ranger
   :ensure t)
