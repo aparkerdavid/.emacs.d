@@ -312,7 +312,7 @@
 
 (global-set-key (kbd "C-a") #'line-beginning-smart)
 (global-set-key (kbd "C-d") #'kill-region-smart)
-(global-set-key (kbd "C-SPC")
+(global-set-key (kbd "M-SPC")
 		(defhydra utility-hydra (:pre (god-local-mode 0)
 				:post (god-local-mode 1))
 		  "Utility Hydra"
@@ -355,7 +355,7 @@
     "/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" 
      browse-url-browser-function 'browse-url-generic)
 
-(global-set-key (kbd "<escape>") #'god-local-mode)
+;; (global-set-key (kbd "<escape>") #'god-local-mode)
 
 
 
