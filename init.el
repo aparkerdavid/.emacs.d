@@ -95,6 +95,41 @@
 (use-package paredit
   :ensure t)
 
+(use-package god-mode
+  :ensure t
+  :config
+    (add-hook 'prog-mode-hook 'god-local-mode)
+    (add-hook 'text-mode-hook 'god-local-mode))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(use-package lsp-mode
+  :ensure t)
+
+(use-package company
+  :ensure t
+  :config
+  (add-hook 'after-init-hook 'global-company-mode)
+  )
+
+(use-package smartparens
+  :ensure t
+  :config
+  (require 'smartparens-config)
+  (add-hook 'prog-mode-hook 'smartparens-mode))
+
+(use-package org
+  :ensure t)
+
+(use-package expand-region
+  :ensure t)
+
+
+
+
 ;; Theme: Gruvbox, extensively customized.
 (use-package base16-theme
   :ensure t
@@ -151,24 +186,7 @@
 
 
 ;; (straight-use-package 'counsel)
-(straight-use-package 'god-mode)
-(straight-use-package 'rainbow-delimiters)
-
-(straight-use-package 'lsp-mode)
-(straight-use-package 'company)
-(straight-use-package 'smartparens)
-(straight-use-package 'org)
-(straight-use-package 'expand-region)
-(require 'smartparens-config)
-(god-local-mode 1)
-(add-hook 'prog-mode-hook 'god-local-mode)
-(add-hook 'text-mode-hook 'god-local-mode)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'prog-mode-hook 'smartparens-mode)
-
-(add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'prog-mode-hook 'global-display-line-numbers-mode)
-
 (setq shift-select-mode nil)
 
 ;; (ivy-mode 1)
@@ -177,6 +195,7 @@
 ;; (setq ivy-use-virtual-buffers t)
 ;; (setq ivy-count-format "(%d/%d) ")
 
+;; Custom funs
 (defun newline-below ()
   (interactive)
   (save-excursion
