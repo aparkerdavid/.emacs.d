@@ -87,9 +87,6 @@
 
 ;; Languages
 
-(use-package hoon-mode
-  :ensure t)
-
 (use-package tide
   :ensure t)
 
