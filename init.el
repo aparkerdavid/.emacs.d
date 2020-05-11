@@ -295,6 +295,8 @@
 ;; (global-set-key (kbd "C-S-B") #'backward-char)
 
 ;; Vim-like navigation for god-mode
+
+(global-set-key (kbd "<escape>") #'god-local-mode)
 (define-key god-local-mode-map (kbd "h") #'backward-word)
 (define-key god-local-mode-map (kbd "H") #'backward-char)
 (define-key god-local-mode-map (kbd "j") #'next-line)
@@ -355,7 +357,7 @@
     "/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" 
      browse-url-browser-function 'browse-url-generic)
 
-;; (global-set-key (kbd "<escape>") #'god-local-mode)
+
 
 
 
