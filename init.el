@@ -130,8 +130,7 @@
 (use-package company
   :ensure t
   :config
-  (add-hook 'after-init-hook 'global-company-mode)
-  )
+  (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package smartparens
   :ensure t
@@ -144,8 +143,6 @@
 
 (use-package expand-region
   :ensure t)
-
-
 
 
 ;; Theme: Gruvbox, extensively customized.
