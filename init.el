@@ -346,6 +346,7 @@
 		  ("N" split-window-vertically "split window vertically")
 		  ("d" delete-window "delete window")
 		  ("r" ranger "ranger" :color blue)
+		  ("g" magit-status "magit status" :color blue)
 		  ("C" (find-file user-init-file) "Edit init file" :color blue)
 		  ("Q" kill-emacs "kill emacs")
 		  ("<escape>" nil "quit")
