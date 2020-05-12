@@ -292,6 +292,8 @@
 (require 'god-mode-isearch)
 (define-key isearch-mode-map (kbd "<return>") #'god-mode-isearch-activate)
 (define-key god-mode-isearch-map (kbd "<return>") #'god-mode-isearch-disable)
+(define-key god-mode-isearch-map (kbd "<escape>") #'isearch-exit)
+
 
 ;; Emacs-like navigation for god-mode
 (global-set-key (kbd "C-f") #'forward-word)
@@ -348,6 +350,8 @@
 		  ("Q" kill-emacs "kill emacs")
 		  ("<escape>" nil "quit")
 		  ))
+
+
 (global-set-key (kbd "C-w") #'er/expand-region)
 (global-set-key (kbd "C-;") #'avy-goto-char-2)
 
