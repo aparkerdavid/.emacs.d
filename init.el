@@ -127,6 +127,11 @@
 (use-package lsp-mode
   :ensure t)
 
+
+(use-package web-mode
+  :ensure t)
+
+
 (use-package company
   :ensure t
   :config
@@ -414,7 +419,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("6daa09c8c2c68de3ff1b83694115231faa7e650fdbb668bc76275f0f2ce2a437" "bac3d6b6cb2476c13e1127c58350c2f61a1eaa14108b83c78d0c1b587d97803f" "3a33d2fa0cec573b282d334de6d289ed05997fb807953da296e8f0fda962dce4" "cdf97d077725855aeb1fa2b00b378542ace6b7cd0164e4a947b2a9fab6fc29ad" default)))
+   '("fee4e306d9070a55dce4d8e9d92d28bd9efe92625d2ba9d4d654fc9cd8113b7f" "ad16a1bf1fd86bfbedae4b32c269b19f8d20d416bd52a87cd50e355bf13c2f23" "d83e34e28680f2ed99fe50fea79f441ca3fddd90167a72b796455e791c90dc49" "60e09d2e58343186a59d9ed52a9b13d822a174b33f20bdc1d4abb86e6b17f45b" "350dc341799fbbb81e59d1e6fff2b2c8772d7000e352a5c070aa4317127eee94" "23ba4b4ba4d1c989784475fed58919225db8d9a9751b32aa8df835134fe7ba6f" "304c39b190267e9b863c0cf9c989da76dcfbb0649cbcb89592e7c5c08348fce9" "ec3e6185729e1a22d4af9163a689643b168e1597f114e1cec31bdb1ab05aa539" "36746ad57649893434c443567cb3831828df33232a7790d232df6f5908263692" "fec45178b55ad0258c5f68f61c9c8fd1a47d73b08fb7a51c15558d42c376083d" "a85e40c7d2df4a5e993742929dfd903899b66a667547f740872797198778d7b5" "bcfc77fcc3e012941eb47d5037f0fac767e23fd2dae039214e5fa856ac8bdfdd" "d9850d120be9d94dd7ae69053630e89af8767c36b131a3aa7b06f14007a24656" "428bdd4b98d4d58cd094e7e074c4a82151ad4a77b9c9e30d75c56dc5a07f26c5" "146061a7ceea4ccc75d975a3bb41432382f656c50b9989c7dc1a7bb6952f6eb4" "a61109d38200252de49997a49d84045c726fa8d0f4dd637fce0b8affaa5c8620" "c9f102cf31165896631747fd20a0ca0b9c64ecae019ce5c2786713a5b7d6315e" "aea30125ef2e48831f46695418677b9d676c3babf43959c8e978c0ad672a7329" "87d46d0ad89557c616d04bef34afd191234992c4eb955ff3c60c6aa3afc2e5cc" "99c86852decaeb0c6f51ce8bd46e4906a4f28ab4c5b201bdc3fdf85b24f88518" "100eeb65d336e3d8f419c0f09170f9fd30f688849c5e60a801a1e6addd8216cb" "6daa09c8c2c68de3ff1b83694115231faa7e650fdbb668bc76275f0f2ce2a437" "bac3d6b6cb2476c13e1127c58350c2f61a1eaa14108b83c78d0c1b587d97803f" "3a33d2fa0cec573b282d334de6d289ed05997fb807953da296e8f0fda962dce4" "cdf97d077725855aeb1fa2b00b378542ace6b7cd0164e4a947b2a9fab6fc29ad" default))
+ '(deft-default-extension "org" t)
+ '(deft-directory "~/notes")
+ '(deft-extensions '("org" "md" "txt"))
+ '(deft-use-filename-as-title t)
+ '(ivy-re-builders-alist '((t . ivy--regex-fuzzy)) t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
