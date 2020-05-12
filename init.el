@@ -349,8 +349,7 @@
 		  ("g" magit-status "magit status" :color blue)
 		  ("C" (find-file user-init-file) "Edit init file" :color blue)
 		  ("Q" kill-emacs "kill emacs")
-		  ("<escape>" nil "quit")
-		  ))
+		  ("<escape>" nil "quit")))
 
 
 (global-set-key (kbd "C-w") #'er/expand-region)
@@ -378,7 +377,11 @@
 ;; open links in msedge
 (setq browse-url-generic-program 
     "/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" 
-     browse-url-browser-function 'browse-url-generic)
+    browse-url-browser-function 'browse-url-generic)
+
+
+;; bash as default shell
+(setq explicit-shell-file-name "/bin/bash")
 
 
 
