@@ -136,7 +136,8 @@
   :ensure t
   :config
   (require 'smartparens-config)
-  (add-hook 'prog-mode-hook 'smartparens-mode))
+  (add-hook 'prog-mode-hook 'smartparens-mode)
+  (add-hook 'lisp-mode-hook 'smartparens-strict-mode))
 
 (use-package org
   :ensure t)
@@ -300,8 +301,9 @@
 (global-set-key (kbd "M-f") #'forward-char)
 (global-set-key (kbd "C-b") #'backward-word)
 (global-set-key (kbd "M-b") #'backward-char)
+(global-set-key [remap set-mark-command] #'mark-toggle)
 
-;; Vim-like navigation for god-mode
+;; vim-like navigation for god-mode
 ;; (define-key god-local-mode-map (kbd "h") #'backward-word)
 ;; (define-key god-local-mode-map (kbd "H") #'backward-char)
 ;; (define-key god-local-mode-map (kbd "j") #'next-line)
@@ -318,6 +320,8 @@
 (define-key god-local-mode-map (kbd "]") #'newline-below)
 (global-set-key (kbd "C-a") #'line-beginning-smart)
 (global-set-key (kbd "C-d") #'kill-region-smart)
+(define-key paredit-mode-map (kbd "C-d") #'smart-kill-region)
+(define-key paredit-mode-map [remap kill-region] #'paredit-kill-region)
 ;; (global-set-key (kbd "M-SPC")
 ;; 		(defhydra utility-hydra (:pre (god-local-mode 0)
 ;; 				:post (god-local-mode 1))
@@ -347,10 +351,31 @@
 		  ("d" delete-window "delete window")
 		  ("r" ranger "ranger" :color blue)
 		  ("g" magit-status "magit status" :color blue)
+		  ("!" eshell "eshell" :color blue)
 		  ("C" (find-file user-init-file) "Edit init file" :color blue)
 		  ("Q" kill-emacs "kill emacs")
 		  ("<escape>" nil "quit")))
 
+
+
+(defhydra barf-hydra ()
+	 ("f" sp-forward-barf-sexp "barf forward" :color blue)
+	 ("b" sp-backward-barf-sexp "barf backward" :color blue))
+
+
+(defhydra slurp-hydra ()
+	 ("f" sp-forward-slurp-sexp "slurp forward" :color blue)
+	 ("b" sp-backward-slurp-sexp "slurp backward" :color blue))
+
+
+(defhydra sp-hydra (:pre (god-local-mode 0)
+			 :post (god-local-mode 1))
+  ("b" barf-hydra/body "barf" :color blue)
+  ("s" slurp-hydra/body "slurp" :color blue)
+  ("m" sp-mark-sexp "mark sexp" :color blue))
+
+
+(define-key smartparens-mode-map (kbd "C-c p") #'sp-hydra/body)
 
 (global-set-key (kbd "C-w") #'er/expand-region)
 (global-set-key (kbd "C-;") #'avy-goto-char-2)
@@ -378,11 +403,6 @@
 (setq browse-url-generic-program 
     "/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" 
     browse-url-browser-function 'browse-url-generic)
-
-
-;; bash as default shell
-(setq explicit-shell-file-name "/bin/bash")
-
 
 
 
