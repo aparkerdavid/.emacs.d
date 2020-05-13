@@ -92,7 +92,7 @@
   :custom (projectile-completion-system 'ivy)
   :config
   (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c P") 'projectile-command-map))
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package hydra
   :ensure t)
@@ -388,7 +388,7 @@
   ("m" sp-mark-sexp "mark sexp" :color blue))
 
 
-(define-key smartparens-mode-map (kbd "C-c p") #'sp-hydra/body)
+(define-key smartparens-mode-map (kbd "C-c n") #'sp-hydra/body)
 
 (global-set-key (kbd "C-w") #'er/expand-region)
 (global-set-key (kbd "C-;") #'avy-goto-char-2)
