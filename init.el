@@ -86,6 +86,14 @@
 (use-package ranger
   :ensure t)
 
+(use-package projectile
+  :ensure t
+  :after (ivy)
+  :custom (projectile-completion-system 'ivy)
+  :config
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c P") 'projectile-command-map))
+
 (use-package hydra
   :ensure t)
 
