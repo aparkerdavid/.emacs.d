@@ -81,7 +81,8 @@
 (use-package magit
   :ensure t
   :config
-    (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
+  (global-set-key (kbd "C-c g") 'magit-status))
 
 (use-package ranger
   :ensure t)
@@ -363,7 +364,7 @@
 		  ("N" split-window-vertically "split window vertically")
 		  ("d" delete-window "delete window")
 		  ("r" ranger "ranger" :color blue)
-		  ("g" magit-status "magit status" :color blue)
+		  ;; ("g" magit-status "magit status" :color blue)
 		  ("!" eshell "eshell" :color blue)
 		  ("C" (find-file user-init-file) "Edit init file" :color blue)
 		  ("Q" kill-emacs "kill emacs")
