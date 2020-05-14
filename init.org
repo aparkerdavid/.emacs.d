@@ -1,4 +1,6 @@
-;; Default settings for frame appearance
+* Default settings for frame appearance
+#+BEGIN_SRC emacs-lisp
+
 (setq initial-frame-alist
       '((width . 100)
         (height . 40)))
@@ -8,9 +10,10 @@
 (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+#+END_SRC
 
-
-;;  Bootstrap straight.el
+* Bootstrap straight.el
+#+BEGIN_SRC emacs-lisp
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -23,8 +26,10 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+#+END_SRC
 
-
+* REST
+#+BEGIN_SRC emacs-lisp
 ;; Hook up use-package to straight.el
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
@@ -199,6 +204,7 @@
   (set-face-foreground 'font-lock-function-name-face nil)
   (set-face-foreground 'font-lock-constant-face nil)
   (set-face-background 'line-number nil)
+  (set-face-foreground 'org-block nil)
 
 
   ;; Fancier modeline
@@ -412,3 +418,5 @@
 (setq browse-url-generic-program 
     "/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" 
     browse-url-browser-function 'browse-url-generic)
+
+#+END_SRC
