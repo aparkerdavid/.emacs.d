@@ -28,14 +28,16 @@
   (load bootstrap-file nil 'nomessage))
 #+END_SRC
 
-* REST
+* Packages
+** Hook up use-package to straight.el
 #+BEGIN_SRC emacs-lisp
-;; Hook up use-package to straight.el
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+#+END_SRC
 
+** Packages
 
-;; Packages
+#+BEGIN_SRC emacs-lisp
 (setq org-src-fontify-natively t)
 (use-package flx
   :ensure t)
@@ -219,89 +221,97 @@
 ;; (straight-use-package 'counsel)
 (add-hook 'prog-mode-hook 'global-display-line-numbers-mode)
 (setq shift-select-mode nil)
+#+END_SRC
 
-;; (ivy-mode 1)
+* Custom funs
 
-;; The following 2 settings are recommended by Ivy "for new users"; I don't know what they do.
-;; (setq ivy-use-virtual-buffers t)
-;; (setq ivy-count-format "(%d/%d) ")
+#+BEGIN_SRC emacs-lisp
+  ;; (ivy-mode 1)
 
-;; Custom funs
-(defun newline-below ()
-  (interactive)
-  (save-excursion
-    (call-interactively 'move-end-of-line)
-    (newline)))
+  ;; The following 2 settings are recommended by Ivy "for new users"; I don't know what they do.
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
 
-(defun newline-above ()
-  (interactive)
+  ;; Custom funs
+  (defun newline-below ()
+    (interactive)
     (save-excursion
-    (call-interactively 'move-beginning-of-line)
-    (newline)))
-
-(defun insert-above ()
-       (interactive)
-       (progn
-	 (call-interactively 'move-beginning-of-line)
-	 (newline)
-	 (call-interactively 'previous-line)
-	 (call-interactively 'god-local-mode 0)))
-
-(defun insert-below ()
-  (interactive)
-  (progn
-    (call-interactively 'move-end-of-line)
-    (newline)
-    (call-interactively 'god-local-mode 0)))
-
-(defun wrath ()
-  "cut the current region and leave god mode; cf 'c' in vim"
-  (interactive)
-  (if
-      (use-region-p)
-       (progn
-	 (call-interactively 'kill-region)
-	 (call-interactively 'god-local-mode 0))
-    (call-interactively 'god-local-mode 0)))
-
-(defun mark-toggle ()
-  "toggle the mark; cf visual mode in vim"
-  (interactive)
-  (if (region-active-p)
-      (deactivate-mark)
-    (call-interactively 'set-mark-command)))
-
-(defun comment-toggle ()
-  "toggle comment status on one or more lines."
-  (interactive)
-  (if (use-region-p)
-      (call-interactively 'comment-line)
-    (if (= (line-beginning-position) (line-end-position))
-	(call-interactively 'comment-dwim)
-	(comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
-
-(defun line-beginning-smart ()
-  "go to the beginning of the line; if already there, go to the first nonwhitespace character."
-  (interactive)
-  (if (= 0 (current-column))
-      (call-interactively 'back-to-indentation)
-    (call-interactively 'move-beginning-of-line)))
-
-(defun kill-region-smart ()
-  (interactive)
-  (if (use-region-p)
-      (call-interactively 'kill-region)
-    (call-interactively 'delete-char)))
-
-(defun select-line ()
-  (interactive)
-  (if (use-region-p)
       (call-interactively 'move-end-of-line)
-    (progn
-      (call-interactively 'move-beginning-of-line)
-      (call-interactively 'set-mark-command)
-      (call-interactively 'move-end-of-line))))
+      (newline)))
 
+  (defun newline-above ()
+    (interactive)
+      (save-excursion
+      (call-interactively 'move-beginning-of-line)
+      (newline)))
+
+  (defun insert-above ()
+	 (interactive)
+	 (progn
+	   (call-interactively 'move-beginning-of-line)
+	   (newline)
+	   (call-interactively 'previous-line)
+	   (call-interactively 'god-local-mode 0)))
+
+  (defun insert-below ()
+    (interactive)
+    (progn
+      (call-interactively 'move-end-of-line)
+      (newline)
+      (call-interactively 'god-local-mode 0)))
+
+  (defun wrath ()
+    "cut the current region and leave god mode; cf 'c' in vim"
+    (interactive)
+    (if
+	(use-region-p)
+	 (progn
+	   (call-interactively 'kill-region)
+	   (call-interactively 'god-local-mode 0))
+      (call-interactively 'god-local-mode 0)))
+
+  (defun mark-toggle ()
+    "toggle the mark; cf visual mode in vim"
+    (interactive)
+    (if (region-active-p)
+	(deactivate-mark)
+      (call-interactively 'set-mark-command)))
+
+  (defun comment-toggle ()
+    "toggle comment status on one or more lines."
+    (interactive)
+    (if (use-region-p)
+	(call-interactively 'comment-line)
+      (if (= (line-beginning-position) (line-end-position))
+	  (call-interactively 'comment-dwim)
+	  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
+
+  (defun line-beginning-smart ()
+    "go to the beginning of the line; if already there, go to the first nonwhitespace character."
+    (interactive)
+    (if (= 0 (current-column))
+	(call-interactively 'back-to-indentation)
+      (call-interactively 'move-beginning-of-line)))
+
+  (defun kill-region-smart ()
+    (interactive)
+    (if (use-region-p)
+	(call-interactively 'kill-region)
+      (call-interactively 'delete-char)))
+
+  (defun select-line ()
+    (interactive)
+    (if (use-region-p)
+	(call-interactively 'move-end-of-line)
+      (progn
+	(call-interactively 'move-beginning-of-line)
+	(call-interactively 'set-mark-command)
+	(call-interactively 'move-end-of-line))))
+#+END_SRC
+
+* Keybindings
+
+#+BEGIN_SRC emacs-lisp
 ;; Keybindings
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
 ;; isearch handling in god-mode
