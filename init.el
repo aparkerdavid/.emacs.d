@@ -153,9 +153,6 @@
   (add-hook 'prog-mode-hook 'smartparens-mode)
   (add-hook 'lisp-mode-hook 'smartparens-strict-mode))
 
-(use-package org
-  :ensure t)
-
 (use-package expand-region
   :ensure t)
 
