@@ -1,3 +1,5 @@
+#+PROPERTY: header-args:emacs-lisp
+
 * Default settings for frame appearance
 #+BEGIN_SRC emacs-lisp
 
@@ -39,38 +41,37 @@
 
 #+BEGIN_SRC emacs-lisp
 (setq org-src-fontify-natively t)
+#+END_SRC
 
+
+#+BEGIN_SRC emacs-lisp
 (use-package flx
   :ensure t)
+#+END_SRC
 
-
+** Fuzzy finding
+#+begin_src emacs-lisp
 (use-package counsel
   :ensure t
   :after (flx)
   :config (ivy-mode 1)
   :custom (ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
+#+end_src
 
-
-;; (use-package helm
-;;   :ensure t
-;;   :config
-;;     (require 'helm-config)
-;;     ;; (helm-mode 1)
-;;     (global-set-key (kbd "M-x") #'helm-M-x)
-;;     (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
-;;     (global-set-key (kbd "C-x C-f") #'helm-find-files)
-;;     (define-key minibuffer-local-map (kbd "M-j") #'next-line)
-;;     (define-key helm-map (kbd "M-k") #'previous-line)
-;;   )
-
-
+** Flycheck
+#+begin_src emacs-lisp
 (use-package flycheck
   :ensure t)
+#+end_src
 
+** Jump search
+#+begin_src emacs-lisp
 (use-package avy
   :ensure t)
+#+end_src
 
-
+** Note organization
+#+begin_src emacs-lisp
 (use-package deft
   :ensure t
   :custom
@@ -78,23 +79,31 @@
     (deft-default-extension "org")
     (deft-directory "~/notes")
     (deft-use-filename-as-title t))
+#+end_src
 
-
+** Zettelkasten
+#+begin_src emacs-lisp
 (use-package zetteldeft
   :ensure t
   :after (deft avy)
   :config (zetteldeft-set-classic-keybindings))
+#+end_src
 
-
+** Magit
+#+begin_src emacs-lisp
 (use-package magit
   :ensure t
   :config
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
   (global-set-key (kbd "C-c g") 'magit-status))
-
+#+end_src
+** ranger dot el
+#+begin_src emacs-lisp
 (use-package ranger
   :ensure t)
+#+end_src
 
+#+begin_src emacs-lisp
 (use-package projectile
   :ensure t
   :after (ivy)
@@ -102,67 +111,97 @@
   :config
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+#+end_src
 
+#+begin_src emacs-lisp
 (use-package hydra
   :ensure t)
+#+end_src
 
 
-;; Languages
+** Languages
 
-(use-package tide
-  :after (tide company)
-  :ensure t
-  :config
-  (defun setup-tide-mode ()
-    "Setup function for tide."
-    (interactive)
-    (tide-setup)
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    (company-mode +1))
-
-  (setq company-tooltip-align-annotations t)
-
-  (add-hook 'js-mode-hook #'setup-tide-mode))
-
-(use-package paredit
+*** web 
+#+begin_src emacs-lisp
+(use-package web-mode
   :ensure t)
+#+end_src
+*** javascript
+ #+begin_src emacs-lisp
+ (use-package tide
+   :after (tide company)
+   :ensure t
+   :config
+   (defun setup-tide-mode ()
+     "Setup function for tide."
 
+     (interactive)
+     (tide-setup)
+     (flycheck-mode +1)
+     (setq flycheck-check-syntax-automatically '(save mode-enabled))
+     (eldoc-mode +1)
+     (tide-hl-identifier-mode +1)
+     (company-mode +1))
+
+   (setq company-tooltip-align-annotations t)
+
+   (add-hook 'js-mode-hook #'setup-tide-mode))
+ #+end_src
+
+** Paredit
+ #+begin_src emacs-lisp
+ (use-package paredit
+   :ensure t)
+ #+end_src
+** God mode
+#+begin_src emacs-lisp
 (use-package god-mode
   :ensure t
   :config
     (add-hook 'prog-mode-hook 'god-local-mode)
     (add-hook 'text-mode-hook 'god-local-mode))
+#+end_src
 
+** Rainbow brackets
+#+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :ensure t
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+end_src
 
+** LSP
+#+begin_src emacs-lisp
 (use-package lsp-mode
   :ensure t)
+#+end_src
 
 
-(use-package web-mode
-  :ensure t)
 
+** Completion
+#+begin_src emacs-lisp
 (use-package company
   :ensure t
   :config
   (add-hook 'after-init-hook 'global-company-mode))
+#+end_src
 
+** Smartparens
+#+begin_src emacs-lisp
 (use-package smartparens
   :ensure t
   :config
   (require 'smartparens-config)
   (add-hook 'prog-mode-hook 'smartparens-mode)
   (add-hook 'lisp-mode-hook 'smartparens-strict-mode))
+#+end_src
 
+** Expand selection
+#+begin_src emacs-lisp
 (use-package expand-region
   :ensure t)
-#+END_SRC
+#+end_src
+
 *** Theme: Gruvbox, extensively customized.
 
 #+BEGIN_SRC emacs-lisp
@@ -174,32 +213,17 @@
     (add-to-list 'default-frame-alist '(background-color . "#1d1d1d"))
     (add-to-list 'default-frame-alist '(foreground-color . "#fbf1c7"))
 
-    ;; Vars for all the gruvbox colors!
+    (set-face-foreground 'org-block nil))
 
+#+end_src
 
-    ;; Some color cusotmizations: less syntax highlighting, comments in red, cooler colors.
-    ;; (set-face-foreground 'font-lock-comment-face gruv-light-red)
-    ;; (set-face-foreground 'font-lock-comment-delimiter-face gruv-light-red)
-    ;; (set-face-foreground 'font-lock-doc-face gruv-light-red)
-    ;; (set-face-foreground 'font-lock-variable-name-face nil)
-    ;; (set-face-foreground 'font-lock-keyword-face gruv-light-aqua)
-    ;; (set-face-foreground 'font-lock-builtin-face gruv-light-blue)
-    ;; (set-face-foreground 'font-lock-function-name-face nil)
-    ;; (set-face-foreground 'font-lock-constant-face nil)
-    ;; (set-face-background 'line-number nil)
-    (set-face-foreground 'org-block nil)
-
-    ;; Fancier modeline
-
-    ;; (set-face-attribute 'mode-line nil :background gruv-dark-purple)
-    ;; (set-face-attribute 'mode-line nil :foreground "#fbf1c7")
-    ;; (set-face-attribute 'mode-line nil :background gruv-dark-purple)
-    ;; (set-face-attribute 'mode-line nil :box `(:line-width 4 :color ,gruv-dark-purple))
-    )
+** Line numbers in programming modes
+#+BEGIN_SRC emacs-lisp
+(add-hook 'prog-mode-hook 'global-display-line-numbers-mode)
 #+END_SRC
 
-;; (straight-use-package 'counsel)
-(add-hook 'prog-mode-hook 'global-display-line-numbers-mode)
+** No shift-selection for arrow motions
+#+BEGIN_SRC emacs-lisp
 (setq shift-select-mode nil)
 #+END_SRC
 
@@ -233,9 +257,7 @@
 #+END_SRC
 ** Other funs
 #+BEGIN_SRC emacs-lisp
-  ;; (ivy-mode 1)
 
-  ;; The following 2 settings are recommended by Ivy "for new users"; I don't know what they do.
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
 
