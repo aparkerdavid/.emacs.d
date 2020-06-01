@@ -203,7 +203,7 @@
 (setq shift-select-mode nil)
 #+END_SRC
 
-* Cgustom funs
+* Custom funs
 
 ** Vars for all gruvbox colors!
 #+BEGIN_SRC emacs-lisp
