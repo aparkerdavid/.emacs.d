@@ -39,6 +39,7 @@
 
 #+BEGIN_SRC emacs-lisp
 (setq org-src-fontify-natively t)
+
 (use-package flx
   :ensure t)
 
@@ -161,70 +162,76 @@
 
 (use-package expand-region
   :ensure t)
+#+END_SRC
+*** Theme: Gruvbox, extensively customized.
 
-;; Theme: Gruvbox, extensively customized.
+#+BEGIN_SRC emacs-lisp
 (use-package base16-theme
-  :ensure t
-  :init
-  (setq custom-safe-themes t)
-  (load-theme 'base16-gruvbox-dark-hard)
-  (add-to-list 'default-frame-alist '(background-color . "#1d1d1d"))
-  (add-to-list 'default-frame-alist '(foreground-color . "#fbf1c7"))
+    :ensure t
+    :init
+    (setq custom-safe-themes t)
+    (load-theme 'base16-gruvbox-dark-hard)
+    (add-to-list 'default-frame-alist '(background-color . "#1d1d1d"))
+    (add-to-list 'default-frame-alist '(foreground-color . "#fbf1c7"))
 
-  ;; Vars for all the gruvbox colors!
-  (defvar gruv-red "#cc241d")
-  (defvar gruv-green "#98971a")
-  (defvar gruv-yellow "#d79921")
-  (defvar gruv-blue "#458588")
-  (defvar gruv-purple "#b16286")
-  (defvar gruv-aqua "#689d6a")
-  (defvar gruv-orange "#d65d0e")
-
-  (defvar gruv-dark-red "#9d0006")
-  (defvar gruv-dark-green "#79740e")
-  (defvar gruv-dark-yellow "#b57614")
-  (defvar gruv-dark-blue "#076678")
-  (defvar gruv-dark-purple "#8f3f71")
-  (defvar gruv-dark-aqua "#427b58")
-  (defvar gruv-dark-orange "#af3a03")
-
-  (defvar gruv-light-red "#fb4934")
-  (defvar gruv-light-green "#b8bb26")
-  (defvar gruv-light-yellow "#fabd2f")
-  (defvar gruv-light-blue "#83a598")
-  (defvar gruv-light-purple "#d3869b")
-  (defvar gruv-light-aqua "#8ec07c")
-  (defvar gruv-light-orange "#fe8019")
-
-  ;; Some color cusotmizations: less syntax highlighting, comments in red, cooler colors.
-  (set-face-foreground 'font-lock-comment-face gruv-light-red)
-  (set-face-foreground 'font-lock-comment-delimiter-face gruv-light-red)
-  (set-face-foreground 'font-lock-doc-face gruv-light-red)
-  (set-face-foreground 'font-lock-variable-name-face nil)
-  (set-face-foreground 'font-lock-keyword-face gruv-light-aqua)
-  (set-face-foreground 'font-lock-builtin-face gruv-light-blue)
-  (set-face-foreground 'font-lock-function-name-face nil)
-  (set-face-foreground 'font-lock-constant-face nil)
-  (set-face-background 'line-number nil)
-  (set-face-foreground 'org-block nil)
+    ;; Vars for all the gruvbox colors!
 
 
-  ;; Fancier modeline
-  
-  ;; (set-face-attribute 'mode-line nil :background gruv-dark-purple)
-  (set-face-attribute 'mode-line nil :foreground "#fbf1c7")
-  (set-face-attribute 'mode-line nil :background gruv-dark-purple)
-  (set-face-attribute 'mode-line nil :box `(:line-width 4 :color ,gruv-dark-purple))
-  )
+    ;; Some color cusotmizations: less syntax highlighting, comments in red, cooler colors.
+    ;; (set-face-foreground 'font-lock-comment-face gruv-light-red)
+    ;; (set-face-foreground 'font-lock-comment-delimiter-face gruv-light-red)
+    ;; (set-face-foreground 'font-lock-doc-face gruv-light-red)
+    ;; (set-face-foreground 'font-lock-variable-name-face nil)
+    ;; (set-face-foreground 'font-lock-keyword-face gruv-light-aqua)
+    ;; (set-face-foreground 'font-lock-builtin-face gruv-light-blue)
+    ;; (set-face-foreground 'font-lock-function-name-face nil)
+    ;; (set-face-foreground 'font-lock-constant-face nil)
+    ;; (set-face-background 'line-number nil)
+    (set-face-foreground 'org-block nil)
 
+    ;; Fancier modeline
+
+    ;; (set-face-attribute 'mode-line nil :background gruv-dark-purple)
+    ;; (set-face-attribute 'mode-line nil :foreground "#fbf1c7")
+    ;; (set-face-attribute 'mode-line nil :background gruv-dark-purple)
+    ;; (set-face-attribute 'mode-line nil :box `(:line-width 4 :color ,gruv-dark-purple))
+    )
+#+END_SRC
 
 ;; (straight-use-package 'counsel)
 (add-hook 'prog-mode-hook 'global-display-line-numbers-mode)
 (setq shift-select-mode nil)
 #+END_SRC
 
-* Custom funs
+* Cgustom funs
 
+** Vars for all gruvbox colors!
+#+BEGIN_SRC emacs-lisp
+    (defvar gruv-red "#cc241d")
+    (defvar gruv-green "#98971a")
+    (defvar gruv-yellow "#d79921")
+    (defvar gruv-blue "#458588")
+    (defvar gruv-purple "#b16286")
+    (defvar gruv-aqua "#689d6a")
+    (defvar gruv-orange "#d65d0e")
+
+    (defvar gruv-dark-red "#9d0006")
+    (defvar gruv-dark-green "#79740e")
+    (defvar gruv-dark-yellow "#b57614")
+    (defvar gruv-dark-blue "#076678")
+    (defvar gruv-dark-purple "#8f3f71")
+    (defvar gruv-dark-aqua "#427b58")
+    (defvar gruv-dark-orange "#af3a03")
+
+    (defvar gruv-light-red "#fb4934")
+    (defvar gruv-light-green "#b8bb26")
+    (defvar gruv-light-yellow "#fabd2f")
+    (defvar gruv-light-blue "#83a598")
+    (defvar gruv-light-purple "#d3869b")
+    (defvar gruv-light-aqua "#8ec07c")
+    (defvar gruv-light-orange "#fe8019")
+#+END_SRC
+** Other funs
 #+BEGIN_SRC emacs-lisp
   ;; (ivy-mode 1)
 
@@ -239,11 +246,13 @@
       (call-interactively 'move-end-of-line)
       (newline)))
 
+
   (defun newline-above ()
     (interactive)
       (save-excursion
       (call-interactively 'move-beginning-of-line)
       (newline)))
+  
 
   (defun insert-above ()
 	 (interactive)
@@ -310,7 +319,6 @@
 #+END_SRC
 
 * Keybindings
-
 #+BEGIN_SRC emacs-lisp
 ;; Keybindings
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
@@ -320,6 +328,11 @@
 (define-key god-mode-isearch-map (kbd "<return>") #'god-mode-isearch-disable)
 (define-key god-mode-isearch-map (kbd "<escape>") #'isearch-exit)
 
+;; Vim arrow keys under meta
+(define-key key-translation-map (kbd "M-h") (kbd "<left>"))
+(define-key key-translation-map (kbd "M-j") (kbd "<down>"))
+(define-key key-translation-map (kbd "M-k") (kbd "<up>"))
+(define-key key-translation-map (kbd "M-l") (kbd "<right>"))
 
 ;; Emacs-like navigation for god-mode
 (global-set-key (kbd "C-f") #'forward-word)
