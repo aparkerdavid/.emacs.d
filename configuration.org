@@ -118,6 +118,15 @@
   :ensure t)
 #+end_src
 
+** Multicursors
+#+begin_src emacs-lisp
+(use-package multiple-cursors
+  :ensure t)
+(use-package mc-extras
+  :ensure t)
+(use-package phi-search
+  :ensure t)
+#+end_src
 
 ** Languages
 
@@ -362,10 +371,9 @@
 
 * Keybindings
 #+BEGIN_SRC emacs-lisp
-;; Keybindings
+
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
-;; isearch handling in god-mode
-(require 'god-mode-isearch)
+
 (define-key isearch-mode-map (kbd "<return>") #'god-mode-isearch-activate)
 (define-key god-mode-isearch-map (kbd "<return>") #'god-mode-isearch-disable)
 (define-key god-mode-isearch-map (kbd "<escape>") #'isearch-exit)
