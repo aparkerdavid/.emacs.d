@@ -374,10 +374,6 @@
 
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
 
-(define-key isearch-mode-map (kbd "<return>") #'god-mode-isearch-activate)
-(define-key god-mode-isearch-map (kbd "<return>") #'god-mode-isearch-disable)
-(define-key god-mode-isearch-map (kbd "<escape>") #'isearch-exit)
-
 ;; Vim arrow keys under meta
 (define-key key-translation-map (kbd "M-h") (kbd "<left>"))
 (define-key key-translation-map (kbd "M-j") (kbd "<down>"))
