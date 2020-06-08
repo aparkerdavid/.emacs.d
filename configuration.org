@@ -37,14 +37,14 @@
 (setq straight-use-package-by-default t)
 #+END_SRC
 
-** Packages
+** General
 
 - Org mode
 #+begin_src emacs-lisp
 (use-package org
-  :ensure t
   :config
-  (org-src-fontify-natively t))
+  (org-indent-mode 1)
+  (setq org-src-fontify-natively t))
 #+end_src
 
 - Fuzzy finding
@@ -74,7 +74,7 @@
 
 - Note organization
 #+begin_src emacs-lisp
-use-package deft
+(use-package deft
   :ensure t
   :custom
     (deft-extensions '("org" "md" "txt"))
@@ -193,7 +193,7 @@ use-package deft
 
 #+end_src
 
-*** Languages
+** Languages
 
 - web 
 #+begin_src emacs-lisp
