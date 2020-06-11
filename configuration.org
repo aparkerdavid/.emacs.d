@@ -42,8 +42,9 @@
 - Org mode
 #+begin_src emacs-lisp
 (use-package org
+  :init
+  (add-hook 'org-mode-hook #'org-indent-mode)
   :config
-  (org-indent-mode 1)
   (setq org-src-fontify-natively t))
 #+end_src
 
@@ -57,7 +58,8 @@
   :ensure t
   :after (flx)
   :config (ivy-mode 1)
-  :custom (ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
+  :custom (ivy-re-builders-alist '((swiper . ivy--regex-plus) (t . ivy--regex-fuzzy)))
+  :bind (("C-s" . swiper)))
 #+end_src
 
 - Flycheck
@@ -189,6 +191,7 @@
     (load-theme 'base16-gruvbox-dark-hard)
     (add-to-list 'default-frame-alist '(background-color . "#1d1d1d"))
     (add-to-list 'default-frame-alist '(foreground-color . "#fbf1c7"))
+    (set-face-attribute 'fringe nil :background nil)
     (set-face-foreground 'org-block nil))
 
 #+end_src
@@ -375,6 +378,8 @@
 (global-set-key (kbd "C-b") #'backward-word)
 (global-set-key (kbd "M-b") #'backward-char)
 (global-set-key (kbd "C-e") #'end-of-line)
+(global-set-key (kbd "C-n") #'next-logical-line)
+(global-set-key (kbd "C-p") #'previous-logical-line)
 (global-set-key [remap set-mark-command] #'mark-toggle)
 
 (global-set-key (kbd "C-k") #'select-line)
