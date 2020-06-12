@@ -143,11 +143,10 @@
 
 *** God mode
 #+begin_src emacs-lisp
-(use-package god-mode
-  :ensure t
-  :config
-    (add-hook 'prog-mode-hook 'god-local-mode)
-    (add-hook 'text-mode-hook 'god-local-mode))
+  (use-package god-mode
+    :ensure t
+    :config
+      (god-mode-all))
 #+end_src
 
 *** Rainbow brackets
