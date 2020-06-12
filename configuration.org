@@ -1,5 +1,3 @@
-#+PROPERTY: header-args emacs-lisp
-
 * Default settings for frame appearance
 #+BEGIN_SRC emacs-lisp
 
@@ -51,15 +49,17 @@
 *** Fuzzy finding & Search
 #+begin_src emacs-lisp
 
-(use-package flx
-  :ensure t)
+  (use-package flx
+    :ensure t)
 
-(use-package counsel
-  :ensure t
-  :after (flx)
-  :init (ivy-mode 1)
-  :custom (ivy-re-builders-alist '((swiper . ivy--regex-plus) (t . ivy--regex-fuzzy)))
-  :bind (("C-s" . swiper)))
+  (use-package counsel
+    :ensure t
+    :after (flx)
+    :init (ivy-mode 1)
+    :custom (ivy-re-builders-alist '((swiper . ivy--regex-plus) (t . ivy--regex-fuzzy)))
+    :bind (("C-s" . swiper)
+           :map swiper-map
+           ("TAB" . swiper-avy)))
 #+end_src
 
 *** Flycheck
@@ -202,7 +202,6 @@
     (set-face-foreground 'org-block nil))
 
 #+end_src
-
 
 
 ** Languages
@@ -372,8 +371,7 @@
 	 (call-interactively 'set-mark-command)
 	 (call-interactively 'move-end-of-line))))
    #+end_src
-
-* Keybindings
+** Keybindings
 #+BEGIN_SRC emacs-lisp
 
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
@@ -384,8 +382,8 @@
 (global-set-key (kbd "C-b") #'backward-word)
 (global-set-key (kbd "M-b") #'backward-char)
 (global-set-key (kbd "C-e") #'end-of-line)
-(global-set-key (kbd "C-n") #'next-logical-line)
-(global-set-key (kbd "C-p") #'previous-logical-line)
+(define-key visual-line-mode-map (kbd "C-n") #'next-logical-line)
+(define-key visual-line-mode-map (kbd "C-p") #'previous-logical-line)
 (global-set-key [remap set-mark-command] #'mark-toggle)
 
 (global-set-key (kbd "C-k") #'select-line)
@@ -495,3 +493,5 @@
     browse-url-browser-function 'browse-url-generic)
 
 #+END_SRC
+
+ 
