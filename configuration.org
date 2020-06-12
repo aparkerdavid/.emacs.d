@@ -39,7 +39,7 @@
 
 ** General
 
-- Org mode
+*** Org mode
 #+begin_src emacs-lisp
 (use-package org
   :init
@@ -48,7 +48,7 @@
   (setq org-src-fontify-natively t))
 #+end_src
 
-- Fuzzy finding
+*** Fuzzy finding & Search
 #+begin_src emacs-lisp
 
 (use-package flx
@@ -57,24 +57,24 @@
 (use-package counsel
   :ensure t
   :after (flx)
-  :config (ivy-mode 1)
+  :init (ivy-mode 1)
   :custom (ivy-re-builders-alist '((swiper . ivy--regex-plus) (t . ivy--regex-fuzzy)))
   :bind (("C-s" . swiper)))
 #+end_src
 
-- Flycheck
+*** Flycheck
 #+begin_src emacs-lisp
 (use-package flycheck
   :ensure t)
 #+end_src
 
-- Jump search
+*** Jump search
 #+begin_src emacs-lisp
 (use-package avy
   :ensure t)
 #+end_src
 
-- Note organization
+*** Note organization
 #+begin_src emacs-lisp
 (use-package deft
   :ensure t
@@ -85,7 +85,7 @@
     (deft-use-filename-as-title t))
 #+end_src
 
-- Zettelkasten
+*** Zettelkasten
 #+begin_src emacs-lisp
 (use-package zetteldeft
   :ensure t
@@ -93,7 +93,7 @@
   :config (zetteldeft-set-classic-keybindings))
 #+end_src
 
-- Magit
+*** Magit
 #+begin_src emacs-lisp
 (use-package magit
   :ensure t
@@ -102,7 +102,7 @@
   (global-set-key (kbd "C-c g") 'magit-status))
 #+end_src
 
-- Projectile
+*** Projectile
 #+begin_src emacs-lisp
 (use-package projectile
   :ensure t
@@ -113,13 +113,19 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 #+end_src
 
-- Hydra
+*** Hydra
 #+begin_src emacs-lisp
 (use-package hydra
   :ensure t)
 #+end_src
 
-- Multicursors
+*** Surround
+#+begin_src emacs-lisp
+(use-package emacs-surround
+:straight (emacs-surround :type git :host github :repo "ganmacs/emacs-surround")
+:bind ("C-q" . 'emacs-surround))
+#+end_src
+*** Multicursors
 #+begin_src emacs-lisp
 (use-package multiple-cursors
   :ensure t)
@@ -129,13 +135,13 @@
   :ensure t)
 #+end_src
 
-- Paredit
+*** Paredit
  #+begin_src emacs-lisp
  (use-package paredit
    :ensure t)
  #+end_src
 
-- God mode
+*** God mode
 #+begin_src emacs-lisp
 (use-package god-mode
   :ensure t
@@ -144,7 +150,7 @@
     (add-hook 'text-mode-hook 'god-local-mode))
 #+end_src
 
-- Rainbow brackets
+*** Rainbow brackets
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :ensure t
@@ -152,13 +158,13 @@
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
 
-- LSP
+*** LSP
 #+begin_src emacs-lisp
 (use-package lsp-mode
   :ensure t)
 #+end_src
 
-- Completion
+*** Completion
 #+begin_src emacs-lisp
 (use-package company
   :ensure t
@@ -166,7 +172,7 @@
   (add-hook 'after-init-hook 'global-company-mode))
 #+end_src
 
-- Smartparens
+*** Smartparens
 #+begin_src emacs-lisp
 (use-package smartparens
   :ensure t
@@ -176,13 +182,13 @@
   (add-hook 'lisp-mode-hook 'smartparens-strict-mode))
 #+end_src
 
-- Expand selection
+*** Expand selection
 #+begin_src emacs-lisp
 (use-package expand-region
   :ensure t)
 #+end_src
 
-- Theme
+*** Theme
 #+BEGIN_SRC emacs-lisp
 (use-package base16-theme
     :ensure t
@@ -191,19 +197,22 @@
     (load-theme 'base16-gruvbox-dark-hard)
     (add-to-list 'default-frame-alist '(background-color . "#1d1d1d"))
     (add-to-list 'default-frame-alist '(foreground-color . "#fbf1c7"))
-    (set-face-attribute 'fringe nil :background nil)
+    (set-face-background 'fringe nil)
+    (fringe-mode 32)
     (set-face-foreground 'org-block nil))
 
 #+end_src
 
+
+
 ** Languages
 
-- web 
+*** Web 
 #+begin_src emacs-lisp
 (use-package web-mode
   :ensure t)
 #+end_src
-- javascript
+*** Javascript/Typescript
  #+begin_src emacs-lisp
  (use-package tide
    :after (tide company)
@@ -224,9 +233,6 @@
 
    (add-hook 'js-mode-hook #'setup-tide-mode))
  #+end_src
-
-
-
 
 * Custom
 ** Config vars
