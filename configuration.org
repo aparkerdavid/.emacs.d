@@ -60,6 +60,7 @@
     :bind (("C-s" . swiper)
            :map swiper-map
            ("TAB" . swiper-avy)))
+
 #+end_src
 
 *** Flycheck
@@ -372,6 +373,13 @@
    #+end_src
 ** Keybindings
 #+BEGIN_SRC emacs-lisp
+
+
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
 (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
 
