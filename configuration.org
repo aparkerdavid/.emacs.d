@@ -52,26 +52,30 @@
   (use-package flx
     :ensure t)
 
+  (use-package avy
+    :ensure t)
+
   (use-package counsel
     :ensure t
-    :after (flx)
+    :after (flx avy)
     :init (ivy-mode 1)
-    :custom (ivy-re-builders-alist '((swiper . ivy--regex-plus) (t . ivy--regex-fuzzy)))
+    :custom
+    (ivy-re-builders-alist '((swiper . ivy--regex-plus) (t . ivy--regex-fuzzy)))
+    (ivy-use-virtual-buffers t)
+    (ivy-count-format "(%d/%d) ")
+    )
+
+  (use-package swiper
+    :ensure t
     :bind (("C-s" . swiper)
            :map swiper-map
-           ("TAB" . swiper-avy)))
-
-#+end_src
+           ("<tab>" . swiper-avy)
+           ("<esc>" . minibuffer-keyboard-quit)))
+           #+end_src
 
 *** Flycheck
 #+begin_src emacs-lisp
 (use-package flycheck
-  :ensure t)
-#+end_src
-
-*** Jump search
-#+begin_src emacs-lisp
-(use-package avy
   :ensure t)
 #+end_src
 
@@ -266,12 +270,6 @@
     (defvar gruv-light-orange "#fe8019")
 #+END_SRC
 ** Functions
- #+BEGIN_SRC emacs-lisp
-
-   (setq ivy-use-virtual-buffers t)
-   (setq ivy-count-format "(%d/%d) ")
- #+end_src
-   ;; Custom funs
   
  #+begin_src emacs-lisp
  (defun newline-below ()
