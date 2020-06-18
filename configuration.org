@@ -27,7 +27,6 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 #+END_SRC
-
 * Packages
 ** Hook up use-package to straight.el
 #+BEGIN_SRC emacs-lisp
@@ -136,8 +135,6 @@
   :ensure t)
 (use-package mc-extras
   :ensure t)
-(use-package phi-search
-  :ensure t)
 #+end_src
 
 *** Paredit
@@ -194,17 +191,13 @@
 
 *** Theme
 #+BEGIN_SRC emacs-lisp
-(use-package base16-theme
-    :ensure t
-    :init
-    (setq custom-safe-themes t)
-    (load-theme 'base16-gruvbox-dark-hard)
-    (add-to-list 'default-frame-alist '(background-color . "#1d1d1d"))
-    (add-to-list 'default-frame-alist '(foreground-color . "#fbf1c7"))
-    (set-face-background 'fringe nil)
-    (fringe-mode 32)
-    (set-face-foreground 'org-block nil))
-
+  (use-package greymatters-theme
+      :ensure t
+      :init
+      (setq custom-safe-themes t)
+      (load-theme 'greymatters)
+      (set-face-background 'fringe nil)
+      (fringe-mode 32))
 #+end_src
 
 
