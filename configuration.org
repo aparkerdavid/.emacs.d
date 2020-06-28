@@ -1,32 +1,62 @@
 * Default settings for frame appearance
 #+BEGIN_SRC emacs-lisp
 
-(setq initial-frame-alist
-      '((width . 100)
-        (height . 40)))
-(setq-default line-spacing 0.125)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
-(setq mouse-wheel-progressive-speed nil)
-(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
-(tool-bar-mode -1)
-(menu-bar-mode -1)
+  (setq initial-frame-alist
+        '((width . 100)
+          (height . 40)
+          (font . "Iosevka-14")
+  ))
+  (setq-default line-spacing 0.125)
+  (setq-default frame-resize-pixelwise t)
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
+  (setq mouse-wheel-progressive-speed nil)
+  (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+
+
+  ;; Cursors
+  (blink-cursor-mode 0)
+
+  (defun god-update-cursor ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only)
+                          'box
+                        'bar)))
+
+  (add-hook 'god-mode-enabled-hook 'god-update-cursor)
+  (add-hook 'god-mode-disabled-hook 'god-update-cursor)
+
 #+END_SRC
+
+** Command as Meta on Mac
+
+#+begin_src emacs-lisp
+(setq mac-option-modifier 'super)
+ (setq mac-command-modifier 'meta)
+#+end_src
 
 * Bootstrap straight.el
 #+BEGIN_SRC emacs-lisp
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+  ;; Use SSH by default for packages on git
+  (setq-default straight-vc-git-default-protocol 'ssh)
 #+END_SRC
+* Start Server
+#+begin_src emacs-lisp
+  (server-start)
+#+end_src
 * Packages
 ** Hook up use-package to straight.el
 #+BEGIN_SRC emacs-lisp
@@ -45,6 +75,11 @@
   (setq org-src-fontify-natively t))
 #+end_src
 
+*** Rainbow
+#+begin_src emacs-lisp
+(use-package rainbow-mode
+:ensure t)
+#+end_src
 *** Fuzzy finding & Search
 #+begin_src emacs-lisp
 
@@ -59,7 +94,7 @@
     :after (flx avy)
     :init (ivy-mode 1)
     :custom
-    (ivy-re-builders-alist '((swiper . ivy--regex-plus) (t . ivy--regex-fuzzy)))
+    (ivy-re-builders-alist '((swiper . ivy--regex-plus) (swiper-isearch . ivy--regex-plus) (t . ivy--regex-fuzzy)))
     (ivy-use-virtual-buffers t)
     (ivy-count-format "(%d/%d) ")
     )
@@ -131,10 +166,11 @@
 #+end_src
 *** Multicursors
 #+begin_src emacs-lisp
-(use-package multiple-cursors
-  :ensure t)
-(use-package mc-extras
-  :ensure t)
+  (use-package multiple-cursors
+    :ensure t
+    :bind (("M-l" . mc/edit-lines)))
+  (use-package mc-extras
+    :ensure t)
 #+end_src
 
 *** Paredit
@@ -145,10 +181,10 @@
 
 *** God mode
 #+begin_src emacs-lisp
-  (use-package god-mode
-    :ensure t
-    :config
-      (god-mode-all))
+  ;; (use-package god-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;     (god-mode-all))
 #+end_src
 
 *** Rainbow brackets
@@ -191,13 +227,9 @@
 
 *** Theme
 #+BEGIN_SRC emacs-lisp
-  (use-package greymatters-theme
-      :ensure t
-      :init
-      (setq custom-safe-themes t)
-      (load-theme 'greymatters)
-      (set-face-background 'fringe nil)
-      (fringe-mode 32))
+  (use-package less-light-theme
+    :straight (less-light-theme :type git :host github :repo "aparkerdavid/less-light-theme")
+    :config (load-theme 'less-light))
 #+end_src
 
 
@@ -232,56 +264,24 @@
 
 * Custom
 ** Config vars
-- No shift-selection for arrow motions
-#+BEGIN_SRC emacs-lisp
-(setq shift-select-mode nil)
-#+END_SRC
-** Vars for all gruvbox colors
-#+BEGIN_SRC emacs-lisp
-    (defvar gruv-red "#cc241d")
-    (defvar gruv-green "#98971a")
-    (defvar gruv-yellow "#d79921")
-    (defvar gruv-blue "#458588")
-    (defvar gruv-purple "#b16286")
-    (defvar gruv-aqua "#689d6a")
-    (defvar gruv-orange "#d65d0e")
-
-    (defvar gruv-dark-red "#9d0006")
-    (defvar gruv-dark-green "#79740e")
-    (defvar gruv-dark-yellow "#b57614")
-    (defvar gruv-dark-blue "#076678")
-    (defvar gruv-dark-purple "#8f3f71")
-    (defvar gruv-dark-aqua "#427b58")
-    (defvar gruv-dark-orange "#af3a03")
-
-    (defvar gruv-light-red "#fb4934")
-    (defvar gruv-light-green "#b8bb26")
-    (defvar gruv-light-yellow "#fabd2f")
-    (defvar gruv-light-blue "#83a598")
-    (defvar gruv-light-purple "#d3869b")
-    (defvar gruv-light-aqua "#8ec07c")
-    (defvar gruv-light-orange "#fe8019")
-#+END_SRC
-** Functions
-  
+** Functions 
  #+begin_src emacs-lisp
- (defun newline-below ()
-     (interactive)
-     (save-excursion
-       (call-interactively 'move-end-of-line)
-       (newline)))
+   (defun newline-below ()
+     "Newline below current"
+        (interactive)
+       (save-excursion
+         (call-interactively 'move-end-of-line)
+         (newline)))
  #+end_src
 
-
-
 #+begin_src emacs-lisp
-   (defun newline-above ()
-     (interactive)
-       (save-excursion
-       (call-interactively 'move-beginning-of-line)
-       (newline)))
+  (defun newline-above ()
+    "Newline above current"
+    (interactive)
+      (save-excursion
+      (call-interactively 'move-beginning-of-line)
+      (newline)))
 #+end_src
-  
 
    #+begin_src emacs-lisp
    (defun insert-above ()
@@ -352,7 +352,7 @@
    #+end_src
 
    #+begin_src emacs-lisp
-   (defun select-line ()
+   (defun select-line () 
    "select the current line"
      (interactive)
      (if (use-region-p)
@@ -366,129 +366,109 @@
 #+BEGIN_SRC emacs-lisp
 
 
-(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
-(global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
+  (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
 
-;; Emacs-like navigation for god-mode
-(global-set-key (kbd "C-f") #'forward-word)
-(global-set-key (kbd "M-f") #'forward-char)
-(global-set-key (kbd "C-b") #'backward-word)
-(global-set-key (kbd "M-b") #'backward-char)
-(global-set-key (kbd "C-e") #'end-of-line)
-(define-key visual-line-mode-map (kbd "C-n") #'next-logical-line)
-(define-key visual-line-mode-map (kbd "C-p") #'previous-logical-line)
-(global-set-key [remap set-mark-command] #'mark-toggle)
+  ;; Emacs-like navigation for god-mode
+  ;; (global-set-key (kbd "C-f") #'forward-word)
+  ;; (global-set-key (kbd "M-f") #'forward-char)
+  ;; (global-set-key (kbd "C-b") #'backward-word)
+  ;; (global-set-key (kbd "M-b") #'backward-char)
+  ;; (global-set-key (kbd "C-e") #'end-of-line)
 
-(global-set-key (kbd "C-k") #'select-line)
+  (define-key visual-line-mode-map [remap next-line] #'next-logical-line)
+  (define-key visual-line-mode-map [remap previous-line] #'previous-logical-line)
+  (global-set-key [remap set-mark-command] #'mark-toggle)
 
-;; vim-like navigation for god-mode
-;; (define-key god-local-mode-map (kbd "h") #'backward-word)
-;; (define-key god-local-mode-map (kbd "H") #'backward-char)
-;; (define-key god-local-mode-map (kbd "j") #'next-line)
-;; (define-key god-local-mode-map (kbd "k") #'previous-line)
-;; (define-key god-local-mode-map (kbd "l") #'forward-word)
-;; (define-key god-local-mode-map (kbd "L") #'forward-char)
-(define-key god-local-mode-map (kbd "i") #'wrath)
-(define-key god-local-mode-map (kbd "C-S-i") (lambda () (interactive) (god-local-mode 0)))
-;; (define-key god-local-mode-map (kbd "m") #'mark-toggle)
-;; (define-key god-local-mode-map (kbd "o") #'insert-below)
-;; (define-key god-local-mode-map (kbd "C-S-o") #'insert-above)
+  (global-set-key (kbd "C-k") #'select-line)
 
-(define-key god-local-mode-map (kbd "[") #'newline-above)
-(define-key god-local-mode-map (kbd "]") #'newline-below)
-(global-set-key (kbd "C-a") #'line-beginning-smart)
-(global-set-key (kbd "C-d") #'kill-region-smart)
-(define-key paredit-mode-map (kbd "C-d") #'smart-kill-region)
-(define-key paredit-mode-map [remap kill-region] #'paredit-kill-region)
-;; (global-set-key (kbd "M-SPC")
-;; 		(defhydra utility-hydra (:pre (god-local-mode 0)
-;; 				:post (god-local-mode 1))
-;; 		  "Utility Hydra"
-;; 		  ("h" windmove-left "window left")
-;; 		  ("j" windmove-down "window down")
-;; 		  ("k" windmove-up "window up")
-;; 		  ("l" windmove-right "window right")
-;; 		  ("H" split-window-horizontally "split window horizontally")
-;; 		  ("J" split-window-vertically "split window vertically")
-;; 		  ("d" delete-window "delete window")
-;; 		  ("r" ranger "ranger" :color blue)
-;; 		  ("C" (find-file user-init-file) "Edit init file" :color blue)
-;; 		  ("Q" kill-emacs "kill emacs")
-;; 		  ("<escape>" nil "quit")
-;; 		  ))
-(global-set-key (kbd "M-SPC")
-		(defhydra utility-hydra (:pre (god-local-mode 0)
-				:post (god-local-mode 1))
-		  "Utility Hydra"
-		  ("b" windmove-left "window left")
-		  ("n" windmove-down "window down")
-		  ("p" windmove-up "window up")
-		  ("f" windmove-right "window right")
-		  ("F" split-window-horizontally "split window horizontally")
-		  ("N" split-window-vertically "split window vertically")
-		  ("d" delete-window "delete window")
-		  ("r" ranger "ranger" :color blue)
-		  ;; ("g" magit-status "magit status" :color blue)
-		  ("!" eshell "eshell" :color blue)
-		  ("C" (find-file "~/.emacs.d/configuration.org") "Edit init file" :color blue)
-		  ("Q" kill-emacs "kill emacs")
-		  ("<escape>" nil "quit")))
+  ;; vim-like navigation for god-mode
+  ;; (define-key god-local-mode-map (kbd "h") #'backward-word)
+  ;; (define-key god-local-mode-map (kbd "H") #'backward-char)
+  ;; (define-key god-local-mode-map (kbd "j") #'next-line)
+  ;; (define-key god-local-mode-map (kbd "k") #'previous-line)
+  ;; (define-key god-local-mode-map (kbd "l") #'forward-word)
+  ;; (define-key god-local-mode-map (kbd "L") #'forward-char)
+  ;; (define-key god-local-mode-map (kbd "i") #'wrath)
+  ;; (define-key god-local-mode-map (kbd "C-S-i") (lambda () (interactive) (god-local-mode 0)))
+  ;; (define-key god-local-mode-map (kbd "m") #'mark-toggle)
+  ;; (define-key god-local-mode-map (kbd "o") #'insert-below)
+  ;; (define-key god-local-mode-map (kbd "C-S-o") #'insert-above)
 
-
-
-(defhydra barf-hydra ()
-	 ("f" sp-forward-barf-sexp "barf forward" :color blue)
-	 ("b" sp-backward-barf-sexp "barf backward" :color blue))
+  ;; (define-key god-local-mode-map (kbd "[") #'newline-above)
+  ;; (define-key god-local-mode-map (kbd "]") #'newline-below)
+  (global-set-key [remap move-beginning-of-line] #'line-beginning-smart)
+  ;; (global-set-key (kbd "C-d") #'kill-region-smart)
+  (define-key paredit-mode-map (kbd "C-d") #'smart-kill-region)
+  (define-key paredit-mode-map [remap kill-region] #'paredit-kill-region)
+  ;; (global-set-key (kbd "M-SPC")
+  ;; 		(defhydra utility-hydra (:pre (god-local-mode 0)
+  ;; 				:post (god-local-mode 1))
+  ;; 		  "Utility Hydra"
+  ;; 		  ("h" windmove-left "window left")
+  ;; 		  ("j" windmove-down "window down")
+  ;; 		  ("k" windmove-up "window up")
+  ;; 		  ("l" windmove-right "window right")
+  ;; 		  ("H" split-window-horizontally "split window horizontally")
+  ;; 		  ("J" split-window-vertically "split window vertically")
+  ;; 		  ("d" delete-window "delete window")
+  ;; 		  ("r" ranger "ranger" :color blue)
+  ;; 		  ("C" (find-file user-init-file) "Edit init file" :color blue)
+  ;; 		  ("Q" kill-emacs "kill emacs")
+  ;; 		  ("<escape>" nil "quit")
+  ;; 		  ))
+  (global-set-key (kbd "M-SPC")
+                  (defhydra utility-hydra (:pre (god-local-mode 0)
+                                  :post (god-local-mode 1))
+                    "Utility Hydra"
+                    ("b" windmove-left "window left")
+                    ("n" windmove-down "window down")
+                    ("p" windmove-up "window up")
+                    ("f" windmove-right "window right")
+                    ("F" split-window-horizontally "split window horizontally")
+                    ("N" split-window-vertically "split window vertically")
+                    ("d" delete-window "delete window")
+                    ("r" ranger "ranger" :color blue)
+                    ;; ("g" magit-status "magit status" :color blue)
+                    ("!" eshell "eshell" :color blue)
+                    ("C" (find-file "~/.emacs.d/configuration.org") "Edit init file" :color blue)
+                    ("Q" kill-emacs "kill emacs")
+                    ("<escape>" nil "quit")))
 
 
-(defhydra slurp-hydra ()
-	 ("f" sp-forward-slurp-sexp "slurp forward" :color blue)
-	 ("b" sp-backward-slurp-sexp "slurp backward" :color blue))
+
+  (defhydra barf-hydra ()
+           ("f" sp-forward-barf-sexp "barf forward" :color blue)
+           ("b" sp-backward-barf-sexp "barf backward" :color blue))
 
 
-(defhydra sp-hydra (:pre (god-local-mode 0)
-			 :post (god-local-mode 1))
-  ("b" barf-hydra/body "barf" :color blue)
-  ("s" slurp-hydra/body "slurp" :color blue)
-  ("m" sp-mark-sexp "mark sexp" :color blue))
+  (defhydra slurp-hydra ()
+           ("f" sp-forward-slurp-sexp "slurp forward" :color blue)
+           ("b" sp-backward-slurp-sexp "slurp backward" :color blue))
 
 
-(define-key smartparens-mode-map (kbd "C-c n") #'sp-hydra/body)
+  (defhydra sp-hydra (:pre (god-local-mode 0)
+                           :post (god-local-mode 1))
+    ("b" barf-hydra/body "barf" :color blue)
+    ("s" slurp-hydra/body "slurp" :color blue)
+    ("m" sp-mark-sexp "mark sexp" :color blue))
 
-(global-set-key (kbd "C-w") #'er/expand-region)
-(global-set-key (kbd "C-y") #'kill-ring-save)
-(global-set-key (kbd "C-v") #'yank)
-(global-set-key (kbd "C-;") #'avy-goto-char-timer)
-(global-set-key (kbd "C-:") #'avy-goto-line)
 
-;; Better commenting function
-(global-set-key (kbd "C-x C-;") #'comment-toggle)
+  (define-key smartparens-mode-map (kbd "C-c n") #'sp-hydra/body)
 
-;; Cursors
-(blink-cursor-mode 0)
-(setq-default cursor-type 'bar)
-(add-hook 'window-setup-hook (lambda () (set-cursor-color gruv-light-yellow)))
-(defun god-update-cursor ()
-  (setq cursor-type (if (or god-local-mode buffer-read-only)
-                        'box
-                      'bar)))
+  (global-set-key (kbd "C-w") #'er/expand-region)
+  (global-set-key (kbd "C-y") #'kill-ring-save)
+  (global-set-key (kbd "C-v") #'yank)
+  (global-set-key (kbd "C-;") #'avy-goto-char-timer)
+  (global-set-key (kbd "C-:") #'avy-goto-line)
 
-(set-cursor-color gruv-light-yellow)
-(add-hook 'activate-mark-hook (lambda () (set-cursor-color gruv-red)))
-(add-hook 'deactivate-mark-hook (lambda () (set-cursor-color gruv-light-yellow)))
-
-(add-hook 'god-mode-enabled-hook 'god-update-cursor)
-(add-hook 'god-mode-disabled-hook 'god-update-cursor)
-
-;; open links in msedge
-(setq browse-url-generic-program 
-    "/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" 
-    browse-url-browser-function 'browse-url-generic)
+  ;; Better commenting function
+  (global-set-key (kbd "C-x C-;") #'comment-toggle)
 
 #+END_SRC
 
