@@ -4,8 +4,7 @@
   (setq default-frame-alist
         '((width . 100)
           (height . 40)
-          (font . "Iosevka-14")
-  ))
+          (font . "Iosevka-14")))
   (setq-default line-spacing 0.125)
   (setq-default frame-resize-pixelwise t)
   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
@@ -14,11 +13,7 @@
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (tool-bar-mode -1)
   (menu-bar-mode -1)
-
-
-  ;; Cursors
   (blink-cursor-mode 0)
-
 
 #+END_SRC
 
@@ -36,88 +31,79 @@
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-  ;; Use SSH by default for packages on git
-  (setq-default straight-vc-git-default-protocol 'ssh)
+    (setq-default straight-vc-git-default-protocol 'ssh)
 #+END_SRC
+
 * Start Server
 #+begin_src emacs-lisp
   (server-start)
 #+end_src
+
 * Packages
 ** Hook up use-package to straight.el
 #+BEGIN_SRC emacs-lisp
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+  (straight-use-package 'use-package)
+  (setq straight-use-package-by-default t)
+  (setq use-package-always-ensure t)
 #+END_SRC
 
 ** General
 
 *** Org mode
 #+begin_src emacs-lisp
-(use-package org
-  :init
-  (add-hook 'org-mode-hook #'org-indent-mode)
-  :config
-  (setq org-src-fontify-natively t))
+  (use-package org
+    :init
+    (add-hook 'org-mode-hook #'org-indent-mode)
+    :custom
+    (org-src-fontify-natively t)
+    (org-cycle-separator-lines -1)
+    (org-src-window-setup 'current-window)
+    (org-startup-folded 'nofold))
 #+end_src
 
 *** Rainbow
 #+begin_src emacs-lisp
-(use-package rainbow-mode
-:ensure t)
+  (use-package rainbow-mode)
 #+end_src
+
 *** Fuzzy finding & Search
 #+begin_src emacs-lisp
+  (use-package flx)
 
-  (use-package flx
-    :ensure t)
-
-  (use-package avy
-    :ensure t)
+  (use-package avy)
 
   (use-package counsel
-    :ensure t
     :after (flx avy)
     :init (ivy-mode 1)
     :custom
-
     (ivy-use-virtual-buffers t)
-    (ivy-count-format "(%d/%d) ")
-    )
+    (ivy-count-format "(%d/%d) "))
 
   (use-package swiper 
-    :ensure t
     :custom (ivy-re-builders-alist '((swiper-isearch . ivy--regex-plus) (t . ivy--regex-fuzzy)))
     :bind (("C-s" . swiper-isearch)
            :map swiper-map
            ("<tab>" . swiper-avy)
            ("M-l" . swiper-mc) 
            ("<esc>" . minibuffer-keyboard-quit)))
+#+end_src
 
-
-           #+end_src 
- 
 *** Flycheck
 #+begin_src emacs-lisp
-(use-package flycheck
-  :ensure t)
+(use-package flycheck)
 #+end_src
  
-*** Note organization
+*** Note organization & Zettelkasten
 #+begin_src emacs-lisp
 (use-package deft
-  :ensure t
   :custom
     (deft-extensions '("org" "md" "txt"))
     (deft-default-extension "org")
     (deft-directory "~/notes")
     (deft-use-filename-as-title t))
-#+end_src
- 
-*** Zettelkasten
-#+begin_src emacs-lisp
+
 (use-package zetteldeft
-  :ensure t
+
   :after (deft avy)
   :config (zetteldeft-set-classic-keybindings))
 #+end_src
@@ -125,7 +111,6 @@
 *** Magit
 #+begin_src emacs-lisp
 (use-package magit
-  :ensure t
   :config
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
   (global-set-key (kbd "C-c g") 'magit-status))
@@ -133,19 +118,17 @@
 
 *** Projectile
 #+begin_src emacs-lisp
-  ;; (use-package projectile
-  ;;   :ensure t
-  ;;   :after (ivy)
-  ;;   :custom (projectile-completion-system 'ivy)
-  ;;   :config
-  ;;   (projectile-mode +1)
-  ;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  (use-package projectile
+    :after (ivy)
+    :custom (projectile-completion-system 'ivy)
+    :config
+    (projectile-mode +1)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 #+end_src
 
 *** Hydra
 #+begin_src emacs-lisp
-(use-package hydra
-  :ensure t)
+(use-package hydra)
 #+end_src
 
 *** Surround
@@ -154,31 +137,29 @@
 :straight (emacs-surround :type git :host github :repo "ganmacs/emacs-surround")
 :bind ("C-q" . 'emacs-surround))
 #+end_src
+
 *** Multicursors
 #+begin_src emacs-lisp
   (use-package multiple-cursors
-    :ensure t
     :bind (("M-l" . mc/edit-lines)))
-  (use-package mc-extras
-    :ensure t)
+
+  (use-package mc-extras)
 #+end_src
 
 *** Paredit
  #+begin_src emacs-lisp
- (use-package paredit
-   :ensure t)
+ (use-package paredit)
  #+end_src
 
 *** Dired
 #+begin_src emacs-lisp
   ;; (use-package dired
-  ;; :ensure t
+
   ;;   :hook (dired-mode . dired-hide-details-mode))
 #+end_src
 *** God mode
 #+begin_src emacs-lisp
   (use-package god-mode
-    :ensure t
     :bind (("<escape>" . god-local-mode))
     :init (god-mode-all)
     :config
@@ -196,21 +177,18 @@
 *** Rainbow brackets
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
-  :ensure t
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
 
 *** LSP
 #+begin_src emacs-lisp
-(use-package lsp-mode
-  :ensure t)
+(use-package lsp-mode)
 #+end_src
 
 *** Completion
 #+begin_src emacs-lisp
 (use-package company
-  :ensure t
   :config
   (add-hook 'after-init-hook 'global-company-mode))
 #+end_src
@@ -218,7 +196,6 @@
 *** Smartparens
 #+begin_src emacs-lisp
 (use-package smartparens
-  :ensure t
   :config
   (require 'smartparens-config)
   (add-hook 'prog-mode-hook 'smartparens-mode)
@@ -227,21 +204,18 @@
 
 *** Expand selection
 #+begin_src emacs-lisp
-(use-package expand-region
-  :ensure t)
+(use-package expand-region)
 #+end_src
 
 *** Terminal Emulator
 #+begin_src emacs-lisp
   (use-package vterm
-    :load-path "~/.emacs.d/emacs-libvterm"
-    :ensure t)
+    :load-path "~/.emacs.d/emacs-libvterm")
 #+end_src
 
 *** Theme
 #+BEGIN_SRC emacs-lisp
   (use-package less-light-theme
-    :ensure t
     :straight (less-light-theme :type git :host github :repo "aparkerdavid/less-light-theme")
     :config (load-theme 'less-light t))
 #+end_src
@@ -251,18 +225,15 @@
 
 *** Web 
 #+begin_src emacs-lisp
-(use-package web-mode
-  :ensure t)
+(use-package web-mode)
 #+end_src
 *** Javascript/Typescript
  #+begin_src emacs-lisp
  (use-package tide
    :after (tide company)
-   :ensure t
    :config
    (defun setup-tide-mode ()
      "Setup function for tide."
-
      (interactive)
      (tide-setup)
      (flycheck-mode +1)

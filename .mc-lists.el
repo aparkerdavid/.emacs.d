@@ -7,6 +7,7 @@
 	kill-region-smart
 	mark-toggle
 	org-beginning-of-line
+	org-cycle
 	org-self-insert-command
 	undefined
 	wrath
@@ -14,6 +15,7 @@
 
 (setq mc/cmds-to-run-once
       '(
+	god-local-mode
 	swiper-isearch
 	swiper-mc
 	))
