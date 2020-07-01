@@ -19,24 +19,17 @@
   ;; Cursors
   (blink-cursor-mode 0)
 
-  (defun god-update-cursor ()
-    (setq cursor-type (if (or god-local-mode buffer-read-only)
-                          'box
-                        'bar)))
-
-  (add-hook 'god-mode-enabled-hook 'god-update-cursor)
-  (add-hook 'god-mode-disabled-hook 'god-update-cursor)
 
 #+END_SRC
 
 ** Command as Meta on Mac
 
 #+begin_src emacs-lisp
-(setq mac-option-modifier 'super)
- (setq mac-command-modifier 'meta)
+  ;; (setq mac-option-modifier 'super)
+  ;; (setq mac-command-modifier 'meta)
 #+end_src
 
-* Bootstrap straight.el
+* Setup straight.el
 #+BEGIN_SRC emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -94,25 +87,29 @@
     :after (flx avy)
     :init (ivy-mode 1)
     :custom
-    (ivy-re-builders-alist '((swiper . ivy--regex-plus) (swiper-isearch . ivy--regex-plus) (t . ivy--regex-fuzzy)))
+
     (ivy-use-virtual-buffers t)
     (ivy-count-format "(%d/%d) ")
     )
 
-  (use-package swiper
+  (use-package swiper 
     :ensure t
-    :bind (("C-s" . swiper)
+    :custom (ivy-re-builders-alist '((swiper-isearch . ivy--regex-plus) (t . ivy--regex-fuzzy)))
+    :bind (("C-s" . swiper-isearch)
            :map swiper-map
            ("<tab>" . swiper-avy)
+           ("M-l" . swiper-mc) 
            ("<esc>" . minibuffer-keyboard-quit)))
-           #+end_src
 
+
+           #+end_src 
+ 
 *** Flycheck
 #+begin_src emacs-lisp
 (use-package flycheck
   :ensure t)
 #+end_src
-
+ 
 *** Note organization
 #+begin_src emacs-lisp
 (use-package deft
@@ -123,7 +120,7 @@
     (deft-directory "~/notes")
     (deft-use-filename-as-title t))
 #+end_src
-
+ 
 *** Zettelkasten
 #+begin_src emacs-lisp
 (use-package zetteldeft
@@ -131,7 +128,7 @@
   :after (deft avy)
   :config (zetteldeft-set-classic-keybindings))
 #+end_src
-
+ 
 *** Magit
 #+begin_src emacs-lisp
 (use-package magit
@@ -143,13 +140,13 @@
 
 *** Projectile
 #+begin_src emacs-lisp
-(use-package projectile
-  :ensure t
-  :after (ivy)
-  :custom (projectile-completion-system 'ivy)
-  :config
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  ;; (use-package projectile
+  ;;   :ensure t
+  ;;   :after (ivy)
+  ;;   :custom (projectile-completion-system 'ivy)
+  ;;   :config
+  ;;   (projectile-mode +1)
+  ;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 #+end_src
 
 *** Hydra
@@ -179,12 +176,28 @@
    :ensure t)
  #+end_src
 
+*** Dired
+#+begin_src emacs-lisp
+  ;; (use-package dired
+  ;; :ensure t
+  ;;   :hook (dired-mode . dired-hide-details-mode))
+#+end_src
 *** God mode
 #+begin_src emacs-lisp
-  ;; (use-package god-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;     (god-mode-all))
+  (use-package god-mode
+    :ensure t
+    :bind (("<escape>" . god-local-mode))
+    :init (god-mode-all)
+    :config
+      (defun god-update-cursor ()
+        (setq cursor-type (if (or god-local-mode buffer-read-only)
+                          'box
+                          'bar)))
+      (add-hook 'god-mode-enabled-hook 'god-update-cursor)
+      (add-hook 'god-mode-disabled-hook 'god-update-cursor)
+      :custom
+      (god-exempt-major-modes '(dired-mode magit-mode vterm-mode)))
+
 #+end_src
 
 *** Rainbow brackets
@@ -225,11 +238,19 @@
   :ensure t)
 #+end_src
 
+*** Terminal Emulator
+#+begin_src emacs-lisp
+  (use-package vterm
+    :load-path "~/.emacs.d/emacs-libvterm"
+    :ensure t)
+#+end_src
+
 *** Theme
 #+BEGIN_SRC emacs-lisp
   (use-package less-light-theme
+    :ensure t
     :straight (less-light-theme :type git :host github :repo "aparkerdavid/less-light-theme")
-    :config (load-theme 'less-light))
+    :config (load-theme 'less-light t))
 #+end_src
 
 
@@ -263,7 +284,6 @@
  #+end_src
 
 * Custom
-** Config vars
 ** Functions 
  #+begin_src emacs-lisp
    (defun newline-below ()
@@ -372,8 +392,6 @@
   (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
-  (global-set-key (kbd "<escape>") (lambda () (interactive) (god-local-mode 1)))
-
   ;; Emacs-like navigation for god-mode
   ;; (global-set-key (kbd "C-f") #'forward-word)
   ;; (global-set-key (kbd "M-f") #'forward-char)
@@ -422,23 +440,23 @@
   ;; 		  ("Q" kill-emacs "kill emacs")
   ;; 		  ("<escape>" nil "quit")
   ;; 		  ))
-  (global-set-key (kbd "M-SPC")
-                  (defhydra utility-hydra (:pre (god-local-mode 0)
-                                  :post (god-local-mode 1))
-                    "Utility Hydra"
-                    ("b" windmove-left "window left")
-                    ("n" windmove-down "window down")
-                    ("p" windmove-up "window up")
-                    ("f" windmove-right "window right")
-                    ("F" split-window-horizontally "split window horizontally")
-                    ("N" split-window-vertically "split window vertically")
-                    ("d" delete-window "delete window")
-                    ("r" ranger "ranger" :color blue)
-                    ;; ("g" magit-status "magit status" :color blue)
-                    ("!" eshell "eshell" :color blue)
-                    ("C" (find-file "~/.emacs.d/configuration.org") "Edit init file" :color blue)
-                    ("Q" kill-emacs "kill emacs")
-                    ("<escape>" nil "quit")))
+  ;; (global-set-key (kbd "M-SPC")
+  ;;                 (defhydra utility-hydra (:pre (god-local-mode 0)
+  ;;                                 :post (god-local-mode 1))
+  ;;                   "Utility Hydra"
+  ;;                   ("b" windmove-left "window left")
+  ;;                   ("n" windmove-down "window down")
+  ;;                   ("p" windmove-up "window up")
+  ;;                   ("f" windmove-right "window right")
+  ;;                   ("F" split-window-horizontally "split window horizontally")
+  ;;                   ("N" split-window-vertically "split window vertically")
+  ;;                   ("d" delete-window "delete window")
+  ;;                   ("r" ranger "ranger" :color blue)
+  ;;                   ;; ("g" magit-status "magit status" :color blue)
+  ;;                   ("!" eshell "eshell" :color blue)
+  ;;                   ("C" (find-file "~/.emacs.d/configuration.org") "Edit init file" :color blue)
+  ;;                   ("Q" kill-emacs "kill emacs")
+  ;;                   ("<escape>" nil "quit")))
 
 
 
@@ -462,14 +480,12 @@
   (define-key smartparens-mode-map (kbd "C-c n") #'sp-hydra/body)
 
   (global-set-key (kbd "C-w") #'er/expand-region)
-  (global-set-key (kbd "C-y") #'kill-ring-save)
-  (global-set-key (kbd "C-v") #'yank)
-  (global-set-key (kbd "C-;") #'avy-goto-char-timer)
-  (global-set-key (kbd "C-:") #'avy-goto-line)
+  ;; (global-set-key (kbd "C-y") #'kill-ring-save)
+  ;; (global-set-key (kbd "C-v") #'yank)
+  ;; (global-set-key (kbd "C-;") #'avy-goto-char-timer)
+  ;; (global-set-key (kbd "C-:") #'avy-goto-line)
 
   ;; Better commenting function
   (global-set-key (kbd "C-x C-;") #'comment-toggle)
 
 #+END_SRC
-
- 
