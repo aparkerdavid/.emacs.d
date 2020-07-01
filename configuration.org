@@ -1,7 +1,7 @@
 * Default settings for frame appearance
 #+BEGIN_SRC emacs-lisp
 
-  (setq initial-frame-alist
+  (setq default-frame-alist
         '((width . 100)
           (height . 40)
           (font . "Iosevka-14")
@@ -21,13 +21,6 @@
 
 
 #+END_SRC
-
-** Command as Meta on Mac
-
-#+begin_src emacs-lisp
-  ;; (setq mac-option-modifier 'super)
-  ;; (setq mac-command-modifier 'meta)
-#+end_src
 
 * Setup straight.el
 #+BEGIN_SRC emacs-lisp
