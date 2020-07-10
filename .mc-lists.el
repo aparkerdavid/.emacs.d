@@ -3,8 +3,12 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+	dired-mark
+	dired-next-line
+	dired-previous-line
 	god-mode-self-insert
 	kill-region-smart
+	line-beginning-smart
 	mark-toggle
 	org-beginning-of-line
 	org-cycle

@@ -34,6 +34,8 @@
     (setq-default straight-vc-git-default-protocol 'ssh)
 #+END_SRC
 
+
+
 * Start Server
 #+begin_src emacs-lisp
   (server-start)
@@ -49,11 +51,19 @@
 
 ** General
 
+*** Fix shell path on Mac
+
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :init (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+#+end_src
+
 *** Org mode
 #+begin_src emacs-lisp
   (use-package org
-    :init
-    (add-hook 'org-mode-hook #'org-indent-mode)
+    :hook
+    (org-mode . org-indent-mode)
     :custom
     (org-src-fontify-natively t)
     (org-cycle-separator-lines -1)
@@ -75,6 +85,8 @@
   (use-package counsel
     :after (flx avy)
     :init (ivy-mode 1)
+    :bind (:map ivy-minibuffer-map
+                ("<escape>" . minibuffer-keyboard-quit))
     :custom
     (ivy-use-virtual-buffers t)
     (ivy-count-format "(%d/%d) "))
@@ -84,8 +96,8 @@
     :bind (("C-s" . swiper-isearch)
            :map swiper-map
            ("<tab>" . swiper-avy)
-           ("M-l" . swiper-mc) 
-           ("<esc>" . minibuffer-keyboard-quit)))
+           ("M-l" . swiper-mc)
+           ("<escape>" . minibuffer-keyboard-quit)))
 #+end_src
 
 *** Flycheck
@@ -146,6 +158,12 @@
   (use-package mc-extras)
 #+end_src
 
+*** Code Formatting
+#+begin_src emacs-lisp
+  (use-package format-all
+    :bind ("C-c =" . format-all-buffer))
+#+end_src
+
 *** Paredit
  #+begin_src emacs-lisp
  (use-package paredit)
@@ -153,25 +171,40 @@
 
 *** Dired
 #+begin_src emacs-lisp
-  ;; (use-package dired
-
-  ;;   :hook (dired-mode . dired-hide-details-mode))
+  (use-package dired
+    :straight nil
+    :ensure nil
+    :hook (dired-mode . dired-hide-details-mode)
+    :bind (("s-\\" . (lambda () (interactive) (dired ".")))
+           :map
+           dired-mode-map
+           ("s" . swiper-isearch)
+           ("f" . dired-find-alternate-file)
+           ("b" . (lambda () (interactive) (find-alternate-file "..")))))
 #+end_src
 *** God mode
 #+begin_src emacs-lisp
-  (use-package god-mode
-    :bind (("<escape>" . god-local-mode))
-    :init (god-mode-all)
-    :config
-      (defun god-update-cursor ()
-        (setq cursor-type (if (or god-local-mode buffer-read-only)
-                          'box
+  (defun god-update-cursor ()
+      (setq cursor-type (if (or god-local-mode buffer-read-only)
+                            'box
                           'bar)))
-      (add-hook 'god-mode-enabled-hook 'god-update-cursor)
-      (add-hook 'god-mode-disabled-hook 'god-update-cursor)
-      :custom
-      (god-exempt-major-modes '(dired-mode magit-mode vterm-mode)))
 
+  (use-package god-mode
+    :bind
+    (("<escape>" . god-local-mode)
+     :map god-local-mode-map
+     ("i" . (lambda () (interactive)
+      (if (use-region-p)
+          (progn
+            (call-interactively 'kill-region)
+            (call-interactively 'god-local-mode 0))
+        (call-interactively 'god-local-mode 0))))
+     ("<escape>" . keyboard-quit))
+    :hook
+    (god-mode-enabled . god-update-cursor)
+    (god-mode-disabled . god-update-cursor)
+    :init (god-mode)
+    )
 #+end_src
 
 *** Rainbow brackets
@@ -195,11 +228,12 @@
 
 *** Smartparens
 #+begin_src emacs-lisp
-(use-package smartparens
-  :config
-  (require 'smartparens-config)
-  (add-hook 'prog-mode-hook 'smartparens-mode)
-  (add-hook 'lisp-mode-hook 'smartparens-strict-mode))
+  (use-package smartparens
+    :config
+    (require 'smartparens-config)
+    :hook
+    (prog-mode . smartparens-mode)
+    (lisp-mode . smartparens-strict-mode))
 #+end_src
 
 *** Expand selection
@@ -210,7 +244,15 @@
 *** Terminal Emulator
 #+begin_src emacs-lisp
   (use-package vterm
-    :load-path "~/.emacs.d/emacs-libvterm")
+    :load-path "~/.emacs.d/emacs-libvterm"
+    :custom (vterm-kill-buffer-on-exit t)
+    :hook (vterm-copy-mode-disabled . god-local-mode)
+    :bind (:map
+           vterm-mode-map
+           ("s-<escape>" . vterm-copy-mode)
+           :map
+           vterm-copy-mode-map
+           ("s-<escape>" . vterm-copy-mode)))
 #+end_src
 
 *** Theme
@@ -218,6 +260,7 @@
   (use-package less-light-theme
     :straight (less-light-theme :type git :host github :repo "aparkerdavid/less-light-theme")
     :config (load-theme 'less-light t))
+
 #+end_src
 
 
@@ -246,7 +289,12 @@
 
    (add-hook 'js-mode-hook #'setup-tide-mode))
  #+end_src
+*** Clojure
+#+begin_src emacs-lisp
+  (use-package clojure-mode)
 
+  (use-package cider)
+#+end_src
 * Custom
 ** Functions 
  #+begin_src emacs-lisp
@@ -347,9 +395,14 @@
 	 (call-interactively 'move-end-of-line))))
    #+end_src
 ** Keybindings
+
+* Edit config with standard macOS keybinding
+#+begin_src emacs-lisp
+  (bind-key "s-," (lambda () (interactive) (find-file "~/.emacs.d/configuration.org")))
+#+end_src
 #+BEGIN_SRC emacs-lisp
 
-
+  (global-set-key (kbd "s-V") #'counsel-yank-pop)
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
