@@ -203,7 +203,8 @@
     :hook
     (god-mode-enabled . god-update-cursor)
     (god-mode-disabled . god-update-cursor)
-    :init (god-mode)
+    :init (god-mode-all)
+    :custom (god-exempt-major-modes '(vterm-mode vterm-copy-mode dired-mode magit-mode))
     )
 #+end_src
 
@@ -246,13 +247,13 @@
   (use-package vterm
     :load-path "~/.emacs.d/emacs-libvterm"
     :custom (vterm-kill-buffer-on-exit t)
-    :hook (vterm-copy-mode-disabled . god-local-mode)
     :bind (:map
            vterm-mode-map
-           ("s-<escape>" . vterm-copy-mode)
+           ("s-<escape>" . (lambda () (interactive) (progn (vterm-copy-mode) (god-local-mode))))
            :map
            vterm-copy-mode-map
-           ("s-<escape>" . vterm-copy-mode)))
+           ("i" . (lambda () (interactive) (progn (vterm-copy-mode -1) (god-local-mode -1))))
+           ("s-<escape>" . (lambda () (interactive) (progn (vterm-copy-mode -1) (god-local-mode -1))))))
 #+end_src
 
 *** Theme
