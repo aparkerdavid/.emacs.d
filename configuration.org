@@ -85,19 +85,23 @@
   (use-package counsel
     :after (flx avy)
     :init (ivy-mode 1)
-    :bind (:map ivy-minibuffer-map
-                ("<escape>" . minibuffer-keyboard-quit))
+    :bind (("C-x b" . counsel-buffer-or-recentf)
+           ("C-x C-b" . switch-to-buffer)
+           :map
+           ivy-minibuffer-map
+           ("<escape>" . minibuffer-keyboard-quit))
     :custom
-    (ivy-use-virtual-buffers t)
+    (ivy-use-virtual-buffers 'nil)
     (ivy-count-format "(%d/%d) "))
 
   (use-package swiper 
     :custom (ivy-re-builders-alist '((swiper-isearch . ivy--regex-plus) (t . ivy--regex-fuzzy)))
-    :bind (("C-s" . swiper-isearch)
-           :map swiper-map
+    :bind (:map swiper-map
            ("<tab>" . swiper-avy)
            ("M-l" . swiper-mc)
            ("<escape>" . minibuffer-keyboard-quit)))
+
+  (substitute-key-definition 'isearch-forward 'swiper-isearch global-map)
 #+end_src
 
 *** Flycheck
@@ -174,7 +178,9 @@
   (use-package dired
     :straight nil
     :ensure nil
-    :hook (dired-mode . dired-hide-details-mode)
+    :hook
+    (dired-mode . dired-hide-details-mode)
+    (dired-mode . auto-revert-mode)
     :bind (("s-\\" . (lambda () (interactive) (dired ".")))
            :map
            dired-mode-map
@@ -206,6 +212,8 @@
     :init (god-mode-all)
     :custom (god-exempt-major-modes '(vterm-mode vterm-copy-mode dired-mode magit-mode))
     )
+
+
 #+end_src
 
 *** Rainbow brackets
@@ -234,7 +242,24 @@
     (require 'smartparens-config)
     :hook
     (prog-mode . smartparens-mode)
+    (prog-mode . (lambda () (interactive)
+                   (progn (sp-local-pair 'prog-mode "{" nil :post-handlers '((indent-between-pair "RET")))
+                          (sp-local-pair 'prog-mode "[" nil :post-handlers '((indent-between-pair "RET")))
+                          (sp-local-pair 'prog-mode "(" nil :post-handlers '((indent-between-pair "RET"))))))
     (lisp-mode . smartparens-strict-mode))
+#+end_src
+
+Smart indentation between bracket pairs, taken from:
+http://xenodium.com/emacs-smartparens-auto-indent/
+
+#+begin_src emacs-lisp
+  (defun indent-between-pair (&rest _ignored)
+    (newline)
+    (indent-according-to-mode)
+    (forward-line -1)
+    (indent-according-to-mode))
+
+
 #+end_src
 
 *** Expand selection
@@ -269,7 +294,9 @@
 
 *** Web 
 #+begin_src emacs-lisp
-(use-package web-mode)
+  (use-package web-mode)
+  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
 #+end_src
 *** Javascript/Typescript
  #+begin_src emacs-lisp

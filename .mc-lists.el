@@ -7,6 +7,7 @@
 	dired-next-line
 	dired-previous-line
 	god-mode-self-insert
+	keyboard-quit
 	kill-region-smart
 	line-beginning-smart
 	mark-toggle
@@ -15,11 +16,13 @@
 	org-self-insert-command
 	undefined
 	wrath
+	god-local-mode
 	))
 
 (setq mc/cmds-to-run-once
       '(
-	god-local-mode
+
 	swiper-isearch
 	swiper-mc
 	))
+
