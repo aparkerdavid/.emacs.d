@@ -237,27 +237,24 @@
 
 *** Smartparens
 #+begin_src emacs-lisp
-  (use-package smartparens
-    :config
-    (require 'smartparens-config)
-    :hook
-    (prog-mode . smartparens-mode)
-    (prog-mode . (lambda () (interactive)
-                   (progn (sp-local-pair 'prog-mode "{" nil :post-handlers '((indent-between-pair "RET")))
-                          (sp-local-pair 'prog-mode "[" nil :post-handlers '((indent-between-pair "RET")))
-                          (sp-local-pair 'prog-mode "(" nil :post-handlers '((indent-between-pair "RET"))))))
-    (lisp-mode . smartparens-strict-mode))
-#+end_src
+    (use-package smartparens
+      :config
+      (require 'smartparens-config)
+    
+      ;; Smart indentation between bracket pairs, taken from:
+      ;; http://xenodium.com/emacs-smartparens-auto-indent/
+      (sp-local-pair 'prog-mode "{" nil :post-handlers '((indent-between-pair "RET")))
+      (sp-local-pair 'prog-mode "[" nil :post-handlers '((indent-between-pair "RET")))(sp-local-pair 'prog-mode "(" nil :post-handlers '((indent-between-pair "RET")))
+      (sp-local-pair 'prog-mode "(" nil :post-handlers '((indent-between-pair "RET")))
+      :hook
+      (prog-mode . smartparens-mode)
+      (lisp-mode . smartparens-strict-mode))
 
-Smart indentation between bracket pairs, taken from:
-http://xenodium.com/emacs-smartparens-auto-indent/
-
-#+begin_src emacs-lisp
-  (defun indent-between-pair (&rest _ignored)
-    (newline)
-    (indent-according-to-mode)
-    (forward-line -1)
-    (indent-according-to-mode))
+    (defun indent-between-pair (&rest _ignored)
+      (newline)
+      (indent-according-to-mode)
+      (forward-line -1)
+      (indent-according-to-mode))
 
 
 #+end_src
@@ -294,9 +291,19 @@ http://xenodium.com/emacs-smartparens-auto-indent/
 
 *** Web 
 #+begin_src emacs-lisp
-  (use-package web-mode)
-  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
+  (use-package web-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode)))
+#+end_src
+
+*** Emmet
+#+begin_src emacs-lisp
+  (use-package emmet-mode
+    :hook
+    (web-mode . emmet-mode))
 #+end_src
 *** Javascript/Typescript
  #+begin_src emacs-lisp
