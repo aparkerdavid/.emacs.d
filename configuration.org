@@ -268,7 +268,10 @@
 #+begin_src emacs-lisp
   (use-package vterm
     :load-path "~/.emacs.d/emacs-libvterm"
-    :custom (vterm-kill-buffer-on-exit t)
+    :custom
+    (vterm-kill-buffer-on-exit t)
+    (vterm-buffer-name-string "vterm: %s")
+  
     :bind (:map
            vterm-mode-map
            ("s-<escape>" . (lambda () (interactive) (progn (vterm-copy-mode) (god-local-mode))))
